@@ -12,6 +12,20 @@ int place(int row, int column) {
     }
     return 1;
 }
+
+void print_board(int n) {
+    cout << "\nSolution " << ++count << ":\n";
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (board[i] == j)
+                cout << " Q ";
+            else
+                cout << " - ";
+        }
+        cout << "\n";
+    }
+}
+
 void Queen(int row, int n) {
     for (int column = 1; column <= n; column++) {
         if (place(row, column)) {
@@ -21,18 +35,6 @@ void Queen(int row, int n) {
             else
                 Queen(row + 1, n);
         }
-    }
-}
-void print_board(int n) {
-    cout << "\nSolution " << ++count << ":\n";
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            if (board[i] == j)
-                cout << "Q ";
-            else
-                cout << "- ";
-        }
-        cout << "\n";
     }
 }
 
