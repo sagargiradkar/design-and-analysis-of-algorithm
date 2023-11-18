@@ -1,5 +1,4 @@
-#include <iostream>
-#include <algorithm> // for std::sort
+#include <bits/stdc++.h>
 using namespace std;
 
 struct table
@@ -33,7 +32,6 @@ void Knapsack(float m, int n)
         t[i].pw = t[i].p / t[i].w;
     }
 
-    // Sorting using std::sort with a lambda function
     sort(t, t + n, [](const table &a, const table &b) {
         return a.pw > b.pw;
     });

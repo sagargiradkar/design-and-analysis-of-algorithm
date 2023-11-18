@@ -1,6 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <algorithm> // Add this line for std::find
+#include <bits/stdc++.h>
 using namespace std;
 
 struct chart
