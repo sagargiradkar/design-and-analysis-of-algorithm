@@ -1,89 +1,100 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
+#include <algorithm> // Add this line for std::find
 using namespace std;
 
 struct chart
 {
-	int weight;
-	int profit;
+    int weight;
+    int profit;
 };
 
 int findMax(int a, int b)
 {
-    if(a>b)
-    {
-        return a;
-    }
-    return b;
+    return (a > b) ? a : b;
 }
 
 void Knapsack(chart c[], int n, int w)
 {
-    int table[n+1][w+1];
+    int table[n + 1][w + 1];
 
-    for(int i=0;i<=n;i++)
+    for (int i = 0; i <= n; i++)
     {
-        for(int j=0;j<=w;j++)
+        for (int j = 0; j <= w; j++)
         {
-            if(i==0 || j==0)
+            if (i == 0 || j == 0)
             {
-                table[i][j]=0;  
+                table[i][j] = 0;
             }
-
-            else if(c[i-1].weight <= j)
+            else if (c[i - 1].weight <= j)
             {
-                table[i][j] = findMax(c[i-1].profit + table[i-1][j - c[i-1].weight],table[i-1][j]);
+                table[i][j] = findMax(c[i - 1].profit + table[i - 1][j - c[i - 1].weight], table[i - 1][j]);
             }
-
             else
             {
-                table[i][j] = table[i-1][j];
+                table[i][j] = table[i - 1][j];
             }
         }
     }
 
-    cout<<"\n --> Maximum Profit = "<<table[n][w]<<endl;
+    cout << "\n --> Fixed Solution Vector x = [ ";
+    vector<int> selectedItems;
 
-    int max = table[n][w], W = w;
+    int maxProfit = table[n][w];
+    int remainingWeight = w;
 
-    for (int i = n; i > 0 && max > 0; i--) 
+    for (int i = n; i > 0 && maxProfit > 0; i--)
     {
-        if (max == table[i - 1][W])
-            continue;    
-        else 
+        // Use std::find from the algorithm header
+        if (std::find(selectedItems.begin(), selectedItems.end(), i) != selectedItems.end())
+            continue;
+        else
         {
-            cout<<"\n --> Item with weight "<<c[i - 1].weight<<" is selected";
-            max = max - c[i - 1].profit;
-            W = W - c[i - 1].weight;
+            selectedItems.push_back(i);
+            maxProfit -= c[i - 1].profit;
+            remainingWeight -= c[i - 1].weight;
         }
     }
+
+    // Output the solution vector
+    for (int i = n; i > 0; i--)
+    {
+        if (std::find(selectedItems.begin(), selectedItems.end(), i) != selectedItems.end())
+            cout << "1 ";
+        else
+            cout << "0 ";
+    }
+    cout << "]";
+
+    cout << "\n\n --> Total Profit Earned = " << table[n][w] << " units. \n\n";
 }
 
 int main()
 {
-    int n,w;
+    int n, w;
     chart c[50];
-    cout<<"\n\n \t\t ***** 0-1 Knapsack Problem ***** \n\n";
-    cout<<"\n >> Enter the number of items = ";
-	cin>>n;
-	cout<<"\n >> Enter the capacity of knapsack = ";
-	cin>>w;
+    cout << "\n\n \t\t *** Knapsack Problem *** \n\n";
+    cout << " >> Enter the Knapsack Capacity = ";
+    cin >> w;
+    cout << "\n >> Enter the No of Objects = ";
+    cin >> n;
 
-    // for loop for taking input profit
-	cout<<"\n >>> Enter the Profit of Object :- \n";
-	for(int i=0; i<n; i++)
-	{
-		cout<<" >> p["<<i<<"] = ";
-		cin>>c[i].profit;
-	}
-	// for loop for taking input weight
-	cout<<"\n >>> Enter the Weight of Object :- \n";
-	for(int i=0; i<n; i++)
-	{
-		cout<<" >> w["<<i<<"] = ";
-		cin>>c[i].weight;
-	}
+    cout << "\n >>> Enter the Profit of Object :- \n";
+    for (int i = 0; i < n; i++)
+    {
+        cout << " >> p[" << i << "] = ";
+        cin >> c[i].profit;
+    }
 
-    Knapsack(c,n,w);
+    cout << "\n >>> Enter the Weight of Object :- \n";
+    for (int i = 0; i < n; i++)
+    {
+        cout << " >> w[" << i << "] = ";
+        cin >> c[i].weight;
+    }
 
-    cout<<endl;
+    Knapsack(c, n, w);
+
+    cout << endl;
+    return 0;
 }
